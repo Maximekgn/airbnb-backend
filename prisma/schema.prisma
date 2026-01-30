@@ -1,0 +1,56 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model User {
+  id        String   @id @default(cuid())
+  firstName String
+  lastName  String
+  avatar    String?
+  email     String   @unique
+  tel       String?
+  properties    Property[]
+}
+
+model Property {
+  id          String         @id @default(cuid())
+  image       String
+  price       String
+  rating      Float
+  name        String
+  location    String
+  category    String
+  lat         Float
+  lng         Float
+  isSelected  Boolean        @default(false)
+  description String
+  bedrooms    Int
+  bathrooms   Int
+  garage      Boolean
+  parking     Int
+  wifi        Boolean
+  kitchen     String
+  ownerId     String
+  owner       User           @relation(fields: [ownerId], references: [id])
+  gallery     GalleryImage[]
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+}
+
+model GalleryImage {
+  id      String @id @default(cuid())
+  url     String
+  propertyId String
+  property   Property  @relation(fields: [propertyId], references: [id])
+}

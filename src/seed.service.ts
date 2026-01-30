@@ -11,7 +11,7 @@ export class SeedService implements OnModuleInit {
 
   async seed() {
     const existingUsers = await this.prisma.user.count();
-    if (existingUsers > 0) {
+    if (existingUsers > 10) {
       console.log('Les données de test existent déjà, seed ignoré');
       return;
     }

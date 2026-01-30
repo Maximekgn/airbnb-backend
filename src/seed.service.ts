@@ -1,5 +1,6 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { PrismaService } from './prisma.service';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class SeedService implements OnModuleInit {
@@ -11,18 +12,21 @@ export class SeedService implements OnModuleInit {
 
   async seed() {
     const existingUsers = await this.prisma.user.count();
-    if (existingUsers > 10) {
+    if (existingUsers > 0) {
       console.log('Les données de test existent déjà, seed ignoré');
       return;
     }
 
     console.log('Initialisation des données de test (Togo)...');
 
+    const hashedPassword = await bcrypt.hash('password123', 10);
+
     const user1 = await this.prisma.user.create({
       data: {
         firstName: 'Koffi',
         lastName: 'Mensah',
         email: 'koffi.mensah@example.tg',
+        password: hashedPassword,
         tel: '+22890123456',
         avatar: 'uploads/profiles/user1.png',
       },
@@ -33,6 +37,7 @@ export class SeedService implements OnModuleInit {
         firstName: 'Ama',
         lastName: 'Aziawor',
         email: 'ama.aziawor@example.tg',
+        password: hashedPassword,
         tel: '+22891234567',
         avatar: 'uploads/profiles/user2.png',
       },

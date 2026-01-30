@@ -1,4 +1,5 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFiles } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFiles, UseGuards, Request } from '@nestjs/common';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { PropertiesService } from './properties.service';
 import { CreatePropertyDto } from './dto/create-property.dto';
 import { UpdatePropertyDto } from './dto/update-property.dto';
@@ -10,6 +11,7 @@ import { extname } from 'path';
 export class PropertiesController {
   constructor(private readonly propertiesService: PropertiesService) {}
 
+  @UseGuards(JwtAuthGuard)
   @Post()
   @UseInterceptors(
     FileFieldsInterceptor(
@@ -36,8 +38,10 @@ export class PropertiesController {
       image?: Express.Multer.File[];
       gallery?: Express.Multer.File[];
     },
+    @Request() req,
   ) {
-    return await this.propertiesService.create(createPropertyDto, files);
+    const userId = req.user.userId;
+    return await this.propertiesService.create(createPropertyDto, files, userId);
   }
 
   @Get()
@@ -50,6 +54,7 @@ export class PropertiesController {
     return await this.propertiesService.findOne(id);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Patch(':id')
   @UseInterceptors(
     FileFieldsInterceptor(
@@ -81,6 +86,7 @@ export class PropertiesController {
     return await this.propertiesService.update(id, updatePropertyDto, files);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   async remove(@Param('id') id: string) {
     return await this.propertiesService.remove(id);

@@ -61,6 +61,7 @@ export class CreatePropertyDto {
   @IsString()
   kitchen: string;
 
+  @IsOptional()
   @IsString()
   ownerId: string;
 }

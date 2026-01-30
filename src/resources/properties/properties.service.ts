@@ -20,17 +20,19 @@ export class PropertiesService {
   async create(
     createPropertyDto: CreatePropertyDto,
     files: { image?: Express.Multer.File[]; gallery?: Express.Multer.File[] },
+    userId: string,
   ) {
     const mainImageUrl = files.image?.[0]?.path.replace(/\\/g, '/') || createPropertyDto.image || '';
     const galleryUrls = files.gallery?.map((file) => file.path.replace(/\\/g, '/')) || [];
 
-    const { image, ...propertyData } = createPropertyDto;
+    const { image, ownerId, ...propertyData } = createPropertyDto;
 
     try {
       return await this.prisma.property.create({
         data: {
           ...propertyData,
           image: mainImageUrl,
+          ownerId: userId,
           gallery: {
             create: galleryUrls.map((url) => ({ url })),
           },

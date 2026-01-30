@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { PrismaService } from 'src/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
@@ -16,9 +17,15 @@ export class UsersService {
   }
 
   async create(createUserDto: CreateUserDto) {
-    return this.prisma.user.create({
-      data: createUserDto,
+    const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
+    const user = await this.prisma.user.create({
+      data: {
+        ...createUserDto,
+        password: hashedPassword,
+      },
     });
+    const { password, ...result } = user;
+    return result;
   }
 
   async findAll() {
@@ -28,11 +35,14 @@ export class UsersService {
       },
     });
 
-    // Ajouter l'URL complète aux chemins d'avatars
-    return users.map((user) => ({
-      ...user,
-      avatar: this.formatUrl(user.avatar),
-    }));
+    // Ajouter l'URL complète aux chemins d'avatars et exclure les mots de passe
+    return users.map((user) => {
+      const { password, ...result } = user;
+      return {
+        ...result,
+        avatar: this.formatUrl(user.avatar),
+      };
+    });
   }
 
   private formatUrl(path: string | null): string | null {
@@ -54,23 +64,38 @@ export class UsersService {
       return null;
     }
 
-    // Ajouter l'URL complète au chemin de l'avatar
+    // Ajouter l'URL complète au chemin de l'avatar et exclure le mot de passe
+    const { password, ...result } = user;
     return {
-      ...user,
+      ...result,
       avatar: this.formatUrl(user.avatar),
     };
   }
 
-  async update(id: string, updateUserDto: UpdateUserDto) {
-    return this.prisma.user.update({
-      where: { id },
-      data: updateUserDto,
+  async findByEmail(email: string) {
+    return this.prisma.user.findUnique({
+      where: { email },
     });
   }
 
+  async update(id: string, updateUserDto: UpdateUserDto) {
+    const data = { ...updateUserDto };
+    if (data.password) {
+      data.password = await bcrypt.hash(data.password, 10);
+    }
+    const user = await this.prisma.user.update({
+      where: { id },
+      data,
+    });
+    const { password, ...result } = user;
+    return result;
+  }
+
   async remove(id: string) {
-    return this.prisma.user.delete({
+    const user = await this.prisma.user.delete({
       where: { id },
     });
+    const { password, ...result } = user;
+    return result;
   }
 }

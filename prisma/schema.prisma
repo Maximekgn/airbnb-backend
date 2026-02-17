@@ -13,6 +13,11 @@ datasource db {
   provider = "sqlite"
 }
 
+enum UserRole {
+  USER
+  ADMIN
+}
+
 model User {
   id        String   @id @default(cuid())
   firstName String
@@ -21,11 +26,24 @@ model User {
   email     String   @unique
   tel       String?  @unique
   password  String
+  role      UserRole @default(USER)
   properties    Property[]
   createdAt   DateTime       @default(now())
   updatedAt   DateTime       @updatedAt
 
   @@index([email])
+}
+
+model Category {
+  id          String     @id @default(cuid())
+  name        String     @unique
+  description String?
+  icon        String?
+  properties  Property[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  @@index([name])
 }
 
 model Property {
@@ -34,7 +52,8 @@ model Property {
   price       String
   name        String
   location    String
-  category    String
+  categoryId  String
+  category    Category       @relation(fields: [categoryId], references: [id], onDelete: Restrict)
   description String
   bedrooms    Int
   bathrooms   Int
@@ -48,7 +67,7 @@ model Property {
   updatedAt   DateTime       @updatedAt
 
   @@index([ownerId])
-  @@index([category])
+  @@index([categoryId])
   @@index([location])
 }
 

@@ -12,7 +12,7 @@ export class CreatePropertyDto {
   location: string;
 
   @IsString()
-  category: string;
+  categoryId: string;
 
   @IsString()
   description: string;
@@ -28,7 +28,6 @@ export class CreatePropertyDto {
   @IsBoolean()
   @Type(() => Boolean)
   garage: boolean;
-
 
   @IsBoolean()
   @Type(() => Boolean)

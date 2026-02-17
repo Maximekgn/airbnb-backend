@@ -1,0 +1,43 @@
+meta {
+  name: Create Property
+  type: http
+  seq: 10
+}
+
+post {
+  url: http://localhost:3000/properties
+  body: multipart-form
+  auth: inherit
+}
+
+body:multipart-form {
+  ~price: 250.00
+  ~name: Modern Apartment in Paris
+  ~location: 75001 Paris, France
+  ~category: Apartment
+  ~description: Spacious and modern apartment in the heart of the city with a beautiful view of the Eiffel Tower
+  ~bedrooms: 3
+  ~bathrooms: 2
+  ~garage: true
+  ~wifi: true
+  ~kitchen: true
+  image: @file()
+  gallery: @file()
+  gallery: @file()
+  gallery: @file()
+  gallery: @file()
+  gallery: @file()
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
+
+tests {
+  test("Create property should return 201 status", function() {
+    expect(res.getStatus()).to.equal(201);
+    expect(res.getBody()).to.include("id");
+    expect(res.getBody().name).to.equal("Modern Apartment in Paris");
+  });
+}

@@ -1,0 +1,23 @@
+meta {
+  name: Get User By ID
+  type: http
+  seq: 7
+}
+
+get {
+  url: http://localhost:3000/users/cljs1234567890abcdefghij
+  auth: none
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
+
+tests {
+  test("Response should contain user data", function() {
+    expect(res.getStatus()).to.equal(200);
+    expect(res.getBody()).to.include("id");
+    expect(res.getBody()).to.include("firstName");
+  });
+}

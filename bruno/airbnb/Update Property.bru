@@ -1,0 +1,42 @@
+meta {
+  name: Update Property
+  type: http
+  seq: 13
+}
+
+patch {
+  url: http://localhost:3000/properties/cljs1234567890abcdefghij
+  body: multipart-form
+  auth: inherit
+}
+
+body:multipart-form {
+  ~price: 350000
+  ~name: Luxury Beachfront Villa
+  ~location: Miami Beach, Florida
+  ~category: Villa
+  ~description: A stunning property with direct ocean views, private beach access, and modern amenities
+  ~bedrooms: 5
+  ~bathrooms: 4
+  ~garage: true
+  ~wifi: true
+  ~kitchen: true
+  image: @file()
+  gallery: @file()
+  gallery: @file()
+  gallery: @file()
+  gallery: @file()
+  gallery: @file()
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
+
+tests {
+  test("Update property should return updated data", function() {
+    expect(res.getStatus()).to.equal(200);
+    expect(res.getBody().name).to.equal("Luxury Beachfront Villa");
+  });
+}

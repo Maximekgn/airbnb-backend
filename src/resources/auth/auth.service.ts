@@ -6,6 +6,7 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '../users/users.service';
 import { CreateUserDto } from '../users/dto/create-user.dto';
+import { UserRole } from 'src/common/enums/user-role.enum';
 import * as bcrypt from 'bcrypt';
 
 export interface SafeUser {
@@ -15,16 +16,18 @@ export interface SafeUser {
   lastName: string;
   avatar: string | null;
   tel: string | null;
+  role: UserRole;
 }
 
 interface UserPayload {
   email: string;
   sub: string;
+  role: UserRole;
 }
 
 export interface LoginResponse {
   access_token: string;
-  user: { email: string; id: string };
+  user: { email: string; id: string; role: UserRole };
 }
 
 @Injectable()
@@ -74,17 +77,25 @@ export class AuthService {
     return safeUser as SafeUser;
   }
 
-  async login(user: { email: string; id: string }): Promise<LoginResponse> {
+  async login(user: {
+    email: string;
+    id: string;
+    role: UserRole;
+  }): Promise<LoginResponse> {
     if (!user?.email || !user?.id) {
       throw new BadRequestException('User email and id are required');
     }
 
-    const payload: UserPayload = { email: user.email, sub: user.id };
+    const payload: UserPayload = {
+      email: user.email,
+      sub: user.id,
+      role: user.role,
+    };
     const token = await this.jwtService.signAsync(payload);
 
     return {
       access_token: token,
-      user: { email: user.email, id: user.id },
+      user: { email: user.email, id: user.id, role: user.role },
     };
   }
 }

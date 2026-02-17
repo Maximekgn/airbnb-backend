@@ -1,0 +1,22 @@
+meta {
+  name: Delete User
+  type: http
+  seq: 9
+}
+
+delete {
+  url: http://localhost:3000/users/cljs1234567890abcdefghij
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
+
+tests {
+  test("Delete should return deleted user data", function() {
+    expect(res.getStatus()).to.equal(200);
+    expect(res.getBody()).to.include("id");
+  });
+}

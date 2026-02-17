@@ -1,0 +1,23 @@
+meta {
+  name: Get Property By ID
+  type: http
+  seq: 12
+}
+
+get {
+  url: http://localhost:3000/properties/cljs1234567890abcdefghij
+  auth: none
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
+
+tests {
+  test("Get property should return property details", function() {
+    expect(res.getStatus()).to.equal(200);
+    expect(res.getBody()).to.include("id");
+    expect(res.getBody()).to.include("owner");
+  });
+}

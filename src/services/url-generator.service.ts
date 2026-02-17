@@ -10,6 +10,6 @@ export class UrlGeneratorService {
       return null;
     }
     const baseUrl = process.env.BACKEND_URL || 'http://localhost:3000';
-    return `${baseUrl}${imagePath}`;
+    return `${baseUrl}/${imagePath}`;
   }
 }

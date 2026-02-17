@@ -1,0 +1,33 @@
+meta {
+  name: Register
+  type: http
+  seq: 2
+}
+
+post {
+  url: http://localhost:3000/auth/register
+  body: multipart-form
+  auth: none
+}
+
+body:multipart-form {
+  ~firstName: Pierre
+  ~lastName: Martin
+  ~email: pierre.martin@example.com
+  ~password: SecurePass123
+  ~tel: +33612345678
+  avatar: @file()
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
+
+tests {
+  test("Register should return new user", function() {
+    expect(res.getStatus()).to.equal(201);
+    expect(res.getBody()).to.include("id");
+    expect(res.getBody().email).to.equal("pierre.martin@example.com");
+  });
+}

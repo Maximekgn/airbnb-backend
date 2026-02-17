@@ -1,0 +1,22 @@
+meta {
+  name: Get All Properties
+  type: http
+  seq: 11
+}
+
+get {
+  url: http://localhost:3000/properties
+  auth: none
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
+
+tests {
+  test("Get all properties should return array", function() {
+    expect(res.getStatus()).to.equal(200);
+    expect(res.getBody()).to.be.an("array");
+  });
+}

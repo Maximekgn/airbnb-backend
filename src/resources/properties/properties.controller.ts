@@ -1,5 +1,20 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFiles, UseGuards, Request } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseInterceptors,
+  UploadedFiles,
+  UseGuards,
+  Request,
+} from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { RolesGuard } from 'src/common/guards/roles.guard';
+import { Roles } from 'src/common/decorators/roles.decorator';
+import { UserRole } from 'src/common/enums/user-role.enum';
 import { PropertiesService } from './properties.service';
 import { CreatePropertyDto } from './dto/create-property.dto';
 import { UpdatePropertyDto } from './dto/update-property.dto';
@@ -11,7 +26,8 @@ import { extname } from 'path';
 export class PropertiesController {
   constructor(private readonly propertiesService: PropertiesService) {}
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.USER, UserRole.ADMIN)
   @Post()
   @UseInterceptors(
     FileFieldsInterceptor(
@@ -23,7 +39,8 @@ export class PropertiesController {
         storage: diskStorage({
           destination: './uploads/properties',
           filename: (req, file, callback) => {
-            const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+            const uniqueSuffix =
+              Date.now() + '-' + Math.round(Math.random() * 1e9);
             const ext = extname(file.originalname);
             callback(null, `${file.fieldname}-${uniqueSuffix}${ext}`);
           },
@@ -41,7 +58,11 @@ export class PropertiesController {
     @Request() req,
   ) {
     const userId = req.user.userId;
-    return await this.propertiesService.create(createPropertyDto, files, userId);
+    return await this.propertiesService.create(
+      createPropertyDto,
+      files,
+      userId,
+    );
   }
 
   @Get()
@@ -54,7 +75,8 @@ export class PropertiesController {
     return await this.propertiesService.findOne(id);
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.USER, UserRole.ADMIN)
   @Patch(':id')
   @UseInterceptors(
     FileFieldsInterceptor(
@@ -66,7 +88,8 @@ export class PropertiesController {
         storage: diskStorage({
           destination: './uploads/properties',
           filename: (req, file, callback) => {
-            const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+            const uniqueSuffix =
+              Date.now() + '-' + Math.round(Math.random() * 1e9);
             const ext = extname(file.originalname);
             callback(null, `${file.fieldname}-${uniqueSuffix}${ext}`);
           },
@@ -86,7 +109,8 @@ export class PropertiesController {
     return await this.propertiesService.update(id, updatePropertyDto, files);
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.USER, UserRole.ADMIN)
   @Delete(':id')
   async remove(@Param('id') id: string) {
     return await this.propertiesService.remove(id);

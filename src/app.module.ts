@@ -5,6 +5,7 @@ import { UsersModule } from './resources/users/users.module';
 import { PropertiesModule } from './resources/properties/properties.module';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './resources/auth/auth.module';
+import { CategoriesModule } from './resources/categories/categories.module';
 import { PrismaService } from './services/prisma.service';
 
 @Module({
@@ -16,6 +17,7 @@ import { PrismaService } from './services/prisma.service';
     UsersModule,
     PropertiesModule,
     AuthModule,
+    CategoriesModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService],

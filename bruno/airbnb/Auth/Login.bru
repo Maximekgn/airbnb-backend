@@ -1,0 +1,48 @@
+meta {
+  name: Login
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/auth/login
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "email": "jean.dupont@example.com",
+    "password": "SecurePassword123"
+  }
+}
+
+script:post-response {
+  if (res.status === 200) {
+    bru.setVar("token", res.body.access_token);
+  }
+}
+
+docs {
+  # Login (Connexion)
+
+  Authentifie un utilisateur et retourne un JWT token.
+
+  ## Champs requis
+  - email: string (email valide)
+  - password: string (minimum 6 caractères)
+
+  ## Réponse réussie (200)
+  ```json
+  {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+    "user": {
+      "email": "jean.dupont@example.com",
+      "id": "uuid-string",
+      "role": "USER"
+    }
+  }
+  ```
+
+  Le token est automatiquement sauvegardé dans la variable `token` pour être utilisé dans les autres requêtes.
+}

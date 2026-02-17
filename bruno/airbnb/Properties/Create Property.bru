@@ -1,0 +1,65 @@
+meta {
+  name: Create Property
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/properties
+  body: multipartForm
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:multipart-form {
+  price: 250.00
+  name: Modern Apartment in Paris
+  location: 75001 Paris, France
+  categoryId:
+  description: Spacious and modern apartment in the heart of the city
+  bedrooms: 3
+  bathrooms: 2
+  garage: true
+  wifi: true
+  kitchen: true
+  ~image:
+  ~gallery:
+  ~gallery:
+  ~gallery:
+  ~gallery:
+  ~gallery:
+}
+
+docs {
+  # Create Property
+
+  Crée une nouvelle annonce de propriété.
+
+  ## Authentification
+  Requise - JWT Token
+
+  ## Champs requis
+  - price: string
+  - name: string
+  - location: string
+  - categoryId: string (UUID)
+  - description: string
+  - bedrooms: number
+  - bathrooms: number
+  - garage: boolean
+  - wifi: boolean
+  - kitchen: boolean
+  - image: file (OBLIGATOIRE - image principale)
+  - gallery: array of files (OBLIGATOIRE - exactement 5 images)
+
+  ## Notes
+  - Les fichiers image et gallery sont commentés avec ~ par défaut
+  - Décommenter et ajouter les fichiers pour l'upload
+  - Le propriétaire est automatiquement défini depuis le token JWT
+
+  ## Réponse (201)
+  Retourne la propriété créée avec la galerie.
+}

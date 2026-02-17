@@ -1,0 +1,43 @@
+meta {
+  name: Create Category
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/categories
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "name": "Luxury",
+    "description": "Luxury properties with premium amenities",
+    "icon": "💎"
+  }
+}
+
+docs {
+  # Create Category (ADMIN Only)
+
+  Crée une nouvelle catégorie de propriétés.
+
+  ## Authentification
+  Requise - Rôle ADMIN uniquement
+
+  ## Champs
+  - name: string (requis, unique)
+  - description: string (optionnel)
+  - icon: string (optionnel, emoji ou texte)
+
+  ## Réponse (201)
+  Retourne la catégorie créée.
+
+  ## Erreur (403)
+  Si l'utilisateur n'est pas ADMIN.
+}

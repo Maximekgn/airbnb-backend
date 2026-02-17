@@ -1,0 +1,40 @@
+meta {
+  name: Delete Category
+  type: http
+  seq: 5
+}
+
+delete {
+  url: {{baseUrl}}/categories/:id
+  body: none
+  auth: bearer
+}
+
+params:path {
+  id:
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+docs {
+  # Delete Category (ADMIN Only)
+
+  Supprime une catégorie existante.
+
+  ## Authentification
+  Requise - Rôle ADMIN uniquement
+
+  ## Paramètres
+  - id: UUID de la catégorie
+
+  ## Réponse (200)
+  Retourne la catégorie supprimée.
+
+  ## Erreur (403)
+  Si l'utilisateur n'est pas ADMIN.
+
+  ## Erreur (400)
+  Si des propriétés sont encore associées à cette catégorie (onDelete: Restrict).
+}

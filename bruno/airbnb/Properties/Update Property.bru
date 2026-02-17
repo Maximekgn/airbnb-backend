@@ -1,0 +1,58 @@
+meta {
+  name: Update Property
+  type: http
+  seq: 4
+}
+
+patch {
+  url: {{baseUrl}}/properties/:id
+  body: multipartForm
+  auth: bearer
+}
+
+params:path {
+  id:
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:multipart-form {
+  price: 300.00
+  description: Updated description for the property
+  ~image:
+  ~gallery:
+  ~gallery:
+  ~gallery:
+  ~gallery:
+  ~gallery:
+}
+
+docs {
+  # Update Property
+
+  Met à jour une propriété existante.
+
+  ## Authentification
+  Requise - Seul le propriétaire peut modifier
+
+  ## Paramètres
+  - id: UUID de la propriété
+
+  ## Champs (tous optionnels)
+  - price, name, location, categoryId, description
+  - bedrooms, bathrooms, garage, wifi, kitchen
+  - image: file (nouvelle image principale)
+  - gallery: array of files (si fourni, doit contenir exactement 5 images)
+
+  ## Notes
+  - Tous les champs sont optionnels
+  - Si vous modifiez la galerie, vous DEVEZ fournir exactement 5 images
+
+  ## Réponse (200)
+  Retourne la propriété mise à jour.
+
+  ## Erreur (403)
+  Si l'utilisateur n'est pas le propriétaire.
+}

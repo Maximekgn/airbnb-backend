@@ -1,0 +1,40 @@
+meta {
+  name: Delete Property
+  type: http
+  seq: 5
+}
+
+delete {
+  url: {{baseUrl}}/properties/:id
+  body: none
+  auth: bearer
+}
+
+params:path {
+  id:
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+docs {
+  # Delete Property
+
+  Supprime une propriété et tous ses fichiers associés.
+
+  ## Authentification
+  Requise - Seul le propriétaire peut supprimer
+
+  ## Paramètres
+  - id: UUID de la propriété
+
+  ## Réponse (200)
+  Retourne la propriété supprimée.
+
+  ## Erreur (403)
+  Si l'utilisateur n'est pas le propriétaire.
+
+  ## Notes
+  - Supprime automatiquement l'image principale et la galerie
+}

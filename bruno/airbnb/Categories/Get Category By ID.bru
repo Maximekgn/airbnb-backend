@@ -1,0 +1,30 @@
+meta {
+  name: Get Category By ID
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/categories/:id
+  body: none
+  auth: none
+}
+
+params:path {
+  id:
+}
+
+docs {
+  # Get Category By ID
+
+  Récupère les détails d'une catégorie spécifique avec ses propriétés associées.
+
+  ## Authentification
+  Non requise (endpoint public)
+
+  ## Paramètres
+  - id: UUID de la catégorie
+
+  ## Réponse
+  Retourne la catégorie avec ses propriétés détaillées.
+}

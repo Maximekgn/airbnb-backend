@@ -1,98 +1,240 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Airbnb Backend API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+Backend API pour une application de type Airbnb, construite avec NestJS, Prisma et SQLite.
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Cette API permet de gérer :
 
-## Project setup
+- **Authentification** : Inscription, connexion, JWT
+- **Utilisateurs** : Gestion des profils avec avatars
+- **Catégories** : Classification des propriétés (Apartment, House, Villa, etc.)
+- **Propriétés** : Annonces de location avec images et galerie
+- **Contrôle d'accès** : Système RBAC avec rôles USER et ADMIN
 
-```bash
-$ npm install
-```
+## Fonctionnalités principales
 
-## Compile and run the project
+- ✅ Authentification JWT sécurisée
+- ✅ Upload de fichiers (avatars, images de propriétés)
+- ✅ Gestion de galerie d'images (5 images par propriété)
+- ✅ Système de catégorisation des propriétés
+- ✅ Contrôle d'accès basé sur les rôles (RBAC)
+- ✅ Validation des données avec class-validator
+- ✅ Base de données Prisma avec SQLite
+- ✅ Seeding automatique des catégories
 
-```bash
-# development
-$ npm run start
+## Technologies
 
-# watch mode
-$ npm run start:dev
+- **Framework** : NestJS 11
+- **ORM** : Prisma 7
+- **Base de données** : SQLite
+- **Authentification** : JWT (passport-jwt)
+- **Validation** : class-validator
+- **Upload** : Multer
+- **Langage** : TypeScript
 
-# production mode
-$ npm run start:prod
-```
-
-## Run tests
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+## Installation
 
 ```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+# Installation des dépendances
+npm install
+
+# Configuration de la base de données
+npx prisma generate
+npx prisma migrate dev
+
+# Seeding des catégories
+npm run seed
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+## Configuration
 
-## Resources
+Créez un fichier `.env` à la racine du projet :
 
-Check out a few resources that may come in handy when working with NestJS:
+```env
+DATABASE_URL="file:./dev.db"
+JWT_SECRET="votre_secret_jwt_tres_securise"
+```
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+## Démarrage du projet
 
-## Support
+```bash
+# Mode développement
+npm run start:dev
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+# Mode production
+npm run build
+npm run start:prod
+```
 
-## Stay in touch
+L'API sera accessible sur `http://localhost:3000`
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+## Seeding de la base de données
 
-## License
+Pour peupler la base de données avec 15 catégories par défaut :
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+```bash
+npm run seed
+```
+
+Catégories créées : Apartment, House, Villa, Studio, Loft, Penthouse, Cottage, Mansion, Townhouse, Bungalow, Tiny House, Beach House, Mountain Cabin, Eco-Lodge, Castle.
+
+## Structure du projet
+
+```
+src/
+├── resources/
+│   ├── auth/           # Authentification JWT
+│   ├── users/          # Gestion des utilisateurs
+│   ├── categories/     # Catégories de propriétés
+│   └── properties/     # Propriétés (annonces)
+├── services/
+│   ├── prisma.service.ts
+│   ├── seed.service.ts
+│   └── files.service.ts
+├── common/
+│   ├── guards/         # Guards RBAC
+│   ├── decorators/     # Décorateurs personnalisés
+│   └── enums/          # Énumérations (rôles)
+├── config/
+│   └── multer.config.ts
+└── scripts/
+    └── seed.ts         # Script de seeding
+
+doc/
+├── AUTH_DOCUMENTATION.md        # Documentation authentification
+├── PROPERTY_DOCUMENTATION.md    # Documentation propriétés
+└── CATEGORY_DOCUMENTATION.md    # Documentation catégories
+
+bruno/
+└── airbnb/             # Collection Bruno API
+    ├── Auth/
+    ├── Categories/
+    └── Properties/
+```
+
+## API Endpoints
+
+### Publics (sans authentification)
+
+- `GET /categories` - Liste des catégories
+- `GET /categories/:id` - Détails d'une catégorie
+- `GET /properties` - Liste des propriétés
+- `GET /properties/:id` - Détails d'une propriété
+
+### Authentifiés (USER et ADMIN)
+
+- `POST /auth/register` - Inscription
+- `POST /auth/login` - Connexion
+- `POST /properties` - Créer une propriété
+- `PATCH /properties/:id` - Modifier sa propriété
+- `DELETE /properties/:id` - Supprimer sa propriété
+
+### Admin uniquement
+
+- `POST /categories` - Créer une catégorie
+- `PATCH /categories/:id` - Modifier une catégorie
+- `DELETE /categories/:id` - Supprimer une catégorie
+
+## Tests avec Bruno
+
+Une collection complète Bruno est disponible dans `/bruno`:
+
+1. Installez [Bruno](https://www.usebruno.com/)
+2. Ouvrez la collection `bruno/airbnb`
+3. Configurez l'environnement Local (baseUrl)
+4. Exécutez les requêtes
+
+Voir `bruno/README.md` pour plus de détails.
+
+## Documentation complète
+
+Documentation détaillée disponible dans le dossier `/doc` :
+
+- **[AUTH_DOCUMENTATION.md](doc/AUTH_DOCUMENTATION.md)** - Authentification, JWT, rôles RBAC
+- **[PROPERTY_DOCUMENTATION.md](doc/PROPERTY_DOCUMENTATION.md)** - Gestion des propriétés, upload d'images
+- **[CATEGORY_DOCUMENTATION.md](doc/CATEGORY_DOCUMENTATION.md)** - Gestion des catégories (ADMIN)
+
+## Créer un compte ADMIN
+
+Par défaut, tous les utilisateurs sont créés avec le rôle `USER`. Pour promouvoir un utilisateur en `ADMIN` :
+
+```sql
+UPDATE User SET role = 'ADMIN' WHERE email = 'admin@example.com';
+```
+
+Ou via Prisma Studio :
+
+```bash
+npx prisma studio
+```
+
+## Scripts disponibles
+
+```bash
+npm run start          # Démarrage normal
+npm run start:dev      # Mode watch (développement)
+npm run start:prod     # Mode production
+npm run build          # Compilation TypeScript
+npm run seed           # Seeding de la base de données
+npm run lint           # Linter ESLint
+npm run format         # Formattage Prettier
+
+npm run test           # Tests unitaires
+npm run test:watch     # Tests en mode watch
+npm run test:cov       # Couverture de tests
+npm run test:e2e       # Tests end-to-end
+```
+
+## Sécurité
+
+- Hash des mots de passe avec bcrypt (10 rounds)
+- JWT sécurisé pour l'authentification
+- Validation des données avec class-validator
+- Contrôle d'accès RBAC (USER/ADMIN)
+- Protection des relations en base de données
+- Gestion sécurisée des fichiers uploadés
+
+## Bases de données
+
+Le projet utilise Prisma ORM avec SQLite. Pour d'autres bases de données :
+
+1. Modifiez `datasource db` dans `prisma/schema.prisma`
+2. Installez l'adaptateur correspondant
+3. Mettez à jour `DATABASE_URL` dans `.env`
+
+## Troubleshooting
+
+### Erreur Prisma
+
+```bash
+npx prisma generate
+npx prisma migrate reset
+npm run seed
+```
+
+### Fichiers uploads manquants
+
+Créez les dossiers :
+
+```bash
+mkdir -p uploads/avatars uploads/properties
+```
+
+### Token expiré
+
+Reconnectez-vous via `POST /auth/login`
+
+## Contribution
+
+Ce projet est un exemple éducatif. Pour contribuer :
+
+1. Fork le projet
+2. Créez une branche (`git checkout -b feature/AmazingFeature`)
+3. Commit vos changements (`git commit -m 'Add AmazingFeature'`)
+4. Push sur la branche (`git push origin feature/AmazingFeature`)
+5. Ouvrez une Pull Request
+
+## Licence
+
+[MIT licensed](LICENSE)

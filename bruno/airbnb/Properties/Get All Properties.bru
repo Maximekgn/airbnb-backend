@@ -1,0 +1,23 @@
+meta {
+  name: Get All Properties
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/properties
+  body: none
+  auth: none
+}
+
+docs {
+  # Get All Properties
+
+  Récupère la liste de toutes les propriétés avec les URLs complètes des images.
+
+  ## Authentification
+  Non requise (endpoint public)
+
+  ## Réponse (200)
+  Retourne un tableau de propriétés.
+}

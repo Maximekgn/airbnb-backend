@@ -1,0 +1,39 @@
+meta {
+  name: Register
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/auth/register
+  body: multipartForm
+  auth: none
+}
+
+body:multipart-form {
+  firstName: Jean
+  lastName: Dupont
+  email: jean.dupont@example.com
+  password: SecurePassword123
+  tel: +33612345678
+  ~avatar:
+}
+
+docs {
+  # Register (Inscription)
+
+  Crée un nouveau comte utilisateur avec avatar optionnel.
+
+  ## Champs requis
+  - firstName: string
+  - lastName: string
+  - email: string (email valide)
+  - password: string (minimum 6 caractères)
+
+  ## Champs optionnels
+  - tel: string
+  - avatar: file (commenté par défaut avec ~)
+
+  ## Réponse réussie (200)
+  Retourne l'objet utilisateur créé sans le mot de passe.
+}

@@ -1,0 +1,49 @@
+meta {
+  name: Update Category
+  type: http
+  seq: 4
+}
+
+patch {
+  url: {{baseUrl}}/categories/:id
+  body: json
+  auth: bearer
+}
+
+params:path {
+  id:
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "name": "Premium Luxury",
+    "description": "Updated description for luxury properties"
+  }
+}
+
+docs {
+  # Update Category (ADMIN Only)
+
+  Met à jour une catégorie existante.
+
+  ## Authentification
+  Requise - Rôle ADMIN uniquement
+
+  ## Paramètres
+  - id: UUID de la catégorie
+
+  ## Champs (tous optionnels)
+  - name: string
+  - description: string
+  - icon: string
+
+  ## Réponse (200)
+  Retourne la catégorie mise à jour.
+
+  ## Erreur (403)
+  Si l'utilisateur n'est pas ADMIN.
+}

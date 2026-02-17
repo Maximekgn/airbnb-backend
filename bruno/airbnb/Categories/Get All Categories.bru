@@ -1,0 +1,23 @@
+meta {
+  name: Get All Categories
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/categories
+  body: none
+  auth: none
+}
+
+docs {
+  # Get All Categories
+
+  Récupère la liste de toutes les catégories avec les propriétés associées.
+
+  ## Authentification
+  Non requise (endpoint public)
+
+  ## Réponse
+  Retourne un tableau de catégories avec leurs propriétés.
+}

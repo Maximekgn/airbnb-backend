@@ -1,0 +1,30 @@
+meta {
+  name: Get Property By ID
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/properties/:id
+  body: none
+  auth: none
+}
+
+params:path {
+  id:
+}
+
+docs {
+  # Get Property By ID
+
+  Récupère les détails complets d'une propriété avec le profil du propriétaire et les images de la galerie.
+
+  ## Authentification
+  Non requise (endpoint public)
+
+  ## Paramètres
+  - id: UUID de la propriété
+
+  ## Réponse (200)
+  Retourne la propriété avec owner et gallery.
+}

@@ -45,12 +45,14 @@ Crée une nouvelle annonce de propriété avec image principale et galerie de 5 
   "price": "string (ex: '250.00', requis)",
   "name": "string (titre de la propriété, requis)",
   "location": "string (adresse complète, requis)",
-  "categoryId": "string (ID de la catégorie, requis)",
+  "categoryId": "string (UUID de la catégorie, requis - voir CATEGORY_DOCUMENTATION.md)",
   "description": "string (description détaillée, requis)",
   "bedrooms": "number (nombre entier, requis)",
   "bathrooms": "number (nombre entier, requis)"
 }
 ```
+
+**Note** : Le `categoryId` doit correspondre à une catégorie existante. Consultez GET /categories pour obtenir la liste des catégories disponibles ou référez-vous à `CATEGORY_DOCUMENTATION.md`.
 
 #### Champs booléens (Amennités)
 
@@ -110,7 +112,7 @@ curl -X POST http://localhost:3000/properties \
   -F "price=250.00" \
   -F "name=Modern Apartment in Paris" \
   -F "location=75001 Paris, France" \
-  -F "category=Apartment" \
+  -F "categoryId=550e8400-e29b-41d4-a716-446655440000" \
   -F "description=Spacious and modern apartment in the heart of the city" \
   -F "bedrooms=3" \
   -F "bathrooms=2" \
@@ -372,7 +374,7 @@ Tous les champs sont optionnels, SAUF la galerie si vous voulez la modifier (5 i
   "price": "string (optionnel)",
   "name": "string (optionnel)",
   "location": "string (optionnel)",
-  "category": "string (optionnel)",
+  "categoryId": "string (UUID - optionnel, voir CATEGORY_DOCUMENTATION.md)",
   "description": "string (optionnel)",
   "bedrooms": "number (optionnel)",
   "bathrooms": "number (optionnel)",
@@ -817,11 +819,18 @@ Tests:
 - `src/resources/properties/dto/update-property.dto.ts` - Validation modification
 - `src/resources/properties/entities/property.entity.ts` - Entité
 
+### Catégories
+
+- Voir `CATEGORY_DOCUMENTATION.md` pour la documentation complète des catégories
+- `src/resources/categories/categories.controller.ts` - Endpoints des catégories
+- `src/resources/categories/categories.service.ts` - Logique métier des catégories
+
 ### Services utilitaires
 
 - `src/services/prisma.service.ts` - Accès base de données
 - `src/services/files.service.ts` - Gestion des fichiers
 - `src/services/url-generator.service.ts` - Génération des URLs
+- `src/services/seed.service.ts` - Service de seeding (catégories)
 
 ### Configuration
 
@@ -838,11 +847,34 @@ Les configurations sont dans : `src/main.ts`, `properties.controller.ts` et `pri
 ```
 DATABASE_URL     - URL de connexion à la base de données
 NODE_ENV         - Environnement (development/production)
+JWT_SECRET       - Clé secrète pour signer les JWT (pour l'authentification)
 ```
 
 ---
 
-## 15. Considérations de Sécurité
+## 15. Seeding de la Base de Données
+
+Pour peupler la base de données avec des catégories initiales, utilisez le script de seeding :
+
+```bash
+npm run seed
+```
+
+Ce script créera automatiquement 15 catégories par défaut (Apartment, House, Villa, Studio, etc.) si elles n'existent pas déjà.
+
+Voir `CATEGORY_DOCUMENTATION.md` section 12 pour la liste complète des catégories suggérées.
+
+---
+
+## 16. Documentation Associée
+
+- `AUTH_DOCUMENTATION.md` - Documentation complète de l'authentification et des rôles
+- `CATEGORY_DOCUMENTATION.md` - Documentation complète des catégories de propriétés
+- `README.md` - Guide de démarrage du projet
+
+---
+
+## 17. Considérations de Sécurité
 
 ### Implémentées
 

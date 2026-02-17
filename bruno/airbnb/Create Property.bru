@@ -6,32 +6,27 @@ meta {
 
 post {
   url: http://localhost:3000/properties
-  body: multipart-form
+  body: multipartForm
   auth: inherit
 }
 
 body:multipart-form {
-  ~price: 250.00
-  ~name: Modern Apartment in Paris
-  ~location: 75001 Paris, France
-  ~category: Apartment
-  ~description: Spacious and modern apartment in the heart of the city with a beautiful view of the Eiffel Tower
-  ~bedrooms: 3
-  ~bathrooms: 2
-  ~garage: true
-  ~wifi: true
-  ~kitchen: true
-  image: @file()
-  gallery: @file()
-  gallery: @file()
-  gallery: @file()
-  gallery: @file()
-  gallery: @file()
-}
-
-settings {
-  encodeUrl: true
-  timeout: 0
+  price: 25000
+  name: Modern Apartment in Paris
+  location: 75001 Paris, France
+  category: Apartment
+  description: Spacious and modern apartment in the heart of the city with a beautiful view of the Eiffel Tower
+  bedrooms: 3
+  bathrooms: 2
+  garage: true
+  wifi: true
+  kitchen: true
+  image: @file(C:\Users\kogon\Pictures\Screenshots\Capture d'écran 2025-10-23 184008.png)
+  gallery: @file(C:\Users\kogon\Pictures\Screenshots\Capture d'écran 2025-10-23 183837.png)
+  ~gallery: @file()
+  ~gallery: @file()
+  ~gallery: @file()
+  ~gallery: @file()
 }
 
 tests {
@@ -40,4 +35,9 @@ tests {
     expect(res.getBody()).to.include("id");
     expect(res.getBody().name).to.equal("Modern Apartment in Paris");
   });
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
 }

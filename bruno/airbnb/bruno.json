@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "airbnb",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}

@@ -20,6 +20,7 @@ export class UsersService {
         password: hashedPassword,
       },
     });
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password, ...result } = user;
     return result;
   }
@@ -29,6 +30,7 @@ export class UsersService {
 
     // Ajouter l'URL complète aux chemins d'avatars et exclure les mots de passe
     return users.map((user) => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { password, ...result } = user;
       return {
         ...result,
@@ -50,6 +52,7 @@ export class UsersService {
     }
 
     // Ajouter l'URL complète au chemin de l'avatar et exclure le mot de passe
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password, ...result } = user;
     return {
       ...result,
@@ -63,6 +66,12 @@ export class UsersService {
     });
   }
 
+  async findByPhone(tel: string) {
+    return this.prisma.user.findUnique({
+      where: { tel },
+    });
+  }
+
   async update(id: string, updateUserDto: UpdateUserDto) {
     const data = { ...updateUserDto };
     if (data.password) {
@@ -72,6 +81,7 @@ export class UsersService {
       where: { id },
       data,
     });
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password, ...result } = user;
     return result;
   }
@@ -80,6 +90,7 @@ export class UsersService {
     const user = await this.prisma.user.delete({
       where: { id },
     });
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password, ...result } = user;
     return result;
   }

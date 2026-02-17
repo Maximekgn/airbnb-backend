@@ -25,6 +25,7 @@ export class PropertiesService {
     const galleryUrls =
       files.gallery?.map((file) => file.path.replace(/\\/g, '/')) || [];
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { image, ownerId, ...propertyData } = createPropertyDto;
 
     try {
@@ -94,7 +95,10 @@ export class PropertiesService {
     files?: { image?: Express.Multer.File[]; gallery?: Express.Multer.File[] },
   ) {
     const { image, ...updateData } = updatePropertyDto;
-    const data: any = { ...updateData };
+    const data: Partial<UpdatePropertyDto> & {
+      image?: string;
+      gallery?: { deleteMany: object; create: { url: string }[] };
+    } = { ...updateData };
 
     // On récupère l'ancienne propriété pour pouvoir supprimer les anciens fichiers si succès
     const oldProperty = await this.prisma.property.findUnique({

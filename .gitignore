@@ -63,3 +63,6 @@ generated
 prisma/migrations
 
 dev.db
+
+
+uploads

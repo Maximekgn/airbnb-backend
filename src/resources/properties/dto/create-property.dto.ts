@@ -2,16 +2,8 @@ import { IsBoolean, IsNumber, IsOptional, IsString } from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class CreatePropertyDto {
-  @IsOptional()
-  @IsString()
-  image: string;
-
   @IsString()
   price: string;
-
-  @IsNumber()
-  @Type(() => Number)
-  rating: number;
 
   @IsString()
   name: string;
@@ -21,19 +13,6 @@ export class CreatePropertyDto {
 
   @IsString()
   category: string;
-
-  @IsNumber()
-  @Type(() => Number)
-  lat: number;
-
-  @IsNumber()
-  @Type(() => Number)
-  lng: number;
-
-  @IsOptional()
-  @IsBoolean()
-  @Type(() => Boolean)
-  isSelected?: boolean;
 
   @IsString()
   description: string;
@@ -50,18 +29,20 @@ export class CreatePropertyDto {
   @Type(() => Boolean)
   garage: boolean;
 
-  @IsNumber()
-  @Type(() => Number)
-  parking: number;
 
   @IsBoolean()
   @Type(() => Boolean)
   wifi: boolean;
 
-  @IsString()
-  kitchen: string;
+  @IsBoolean()
+  @Type(() => Boolean)
+  kitchen: boolean;
 
   @IsOptional()
   @IsString()
   ownerId: string;
+
+  @IsOptional()
+  @IsString()
+  image?: string;
 }

@@ -1,29 +1,29 @@
 import { Injectable } from '@nestjs/common';
 import { CreatePropertyDto } from './dto/create-property.dto';
 import { UpdatePropertyDto } from './dto/update-property.dto';
-import { PrismaService } from 'src/prisma.service';
-import { ConfigService } from '@nestjs/config';
-import * as fs from 'fs';
-import { join } from 'path';
+import { PrismaService } from 'src/services/prisma.service';
+import { FileService } from 'src/services/files.service';
+import { UrlGeneratorService } from 'src/services/url-generator.service';
 
 @Injectable()
 export class PropertiesService {
-  private readonly baseUrl: string;
-
   constructor(
     private prisma: PrismaService,
-    private configService: ConfigService
-  ) {
-    this.baseUrl = this.configService.get<string>('BACKEND_URL') || 'http://localhost:3000';
-  }
+    private urlGenerator: UrlGeneratorService,
+    private fileService: FileService,
+  ) {}
 
   async create(
     createPropertyDto: CreatePropertyDto,
     files: { image?: Express.Multer.File[]; gallery?: Express.Multer.File[] },
     userId: string,
   ) {
-    const mainImageUrl = files.image?.[0]?.path.replace(/\\/g, '/') || createPropertyDto.image || '';
-    const galleryUrls = files.gallery?.map((file) => file.path.replace(/\\/g, '/')) || [];
+    const mainImageUrl =
+      files.image?.[0]?.path.replace(/\\/g, '/') ||
+      createPropertyDto.image ||
+      '';
+    const galleryUrls =
+      files.gallery?.map((file) => file.path.replace(/\\/g, '/')) || [];
 
     const { image, ownerId, ...propertyData } = createPropertyDto;
 
@@ -40,38 +40,20 @@ export class PropertiesService {
       });
     } catch (error) {
       // En cas d'échec de la DB, on supprime les fichiers fraîchement uploadés
-      if (files.image?.[0]) this.deleteFile(files.image[0].path);
-      if (files.gallery) files.gallery.forEach((file) => this.deleteFile(file.path));
+      if (files.image?.[0]) this.fileService.deleteFile(files.image[0].path);
+      if (files.gallery)
+        files.gallery.forEach((file) => this.fileService.deleteFile(file.path));
       throw error;
     }
   }
 
-  private deleteFile(path: string | null) {
-    if (!path || path.startsWith('http')) return;
-    const absolutePath = join(process.cwd(), path);
-    if (fs.existsSync(absolutePath)) {
-      try {
-        fs.unlinkSync(absolutePath);
-      } catch (err) {
-        console.error(`Erreur lors de la suppression du fichier ${absolutePath}:`, err);
-      }
-    }
-  }
-
   async findAll() {
-    const properties = await this.prisma.property.findMany({});
+    const properties = await this.prisma.property.findMany();
 
     return properties.map((property) => ({
       ...property,
-      image: this.formatUrl(property.image),
+      image: this.urlGenerator.generateUrl(property.image),
     }));
-  }
-
-  private formatUrl(path: string | null): string | null {
-    if (!path) return null;
-    if (path.startsWith('http')) return path;
-    const cleanPath = path.startsWith('/') ? path.substring(1) : path;
-    return `${this.baseUrl}/${cleanPath}`;
   }
 
   async findOne(id: string) {
@@ -90,14 +72,18 @@ export class PropertiesService {
     // Ajouter l'URL complète aux chemins d'images
     return {
       ...property,
-      image: this.formatUrl(property.image),
-      owner: property.owner ? {
-        ...property.owner,
-        avatar: this.formatUrl(property.owner.avatar),
-      } : null,
+      image: this.urlGenerator.generateUrl(property.image),
+      owner: property.owner
+        ? {
+            ...property.owner,
+            avatar: property.owner.avatar
+              ? this.urlGenerator.generateUrl(property.owner.avatar)
+              : null,
+          }
+        : null,
       gallery: property.gallery.map((img) => ({
         ...img,
-        url: this.formatUrl(img.url),
+        url: this.urlGenerator.generateUrl(img.url),
       })),
     };
   }
@@ -141,17 +127,20 @@ export class PropertiesService {
 
       // SI SUCCÈS : On supprime les ANCIENS fichiers s'ils ont été remplacés
       if (files?.image?.[0] && oldProperty.image) {
-        this.deleteFile(oldProperty.image);
+        this.fileService.deleteFile(oldProperty.image);
       }
       if (files?.gallery && files.gallery.length > 0) {
-        oldProperty.gallery.forEach((img) => this.deleteFile(img.url));
+        oldProperty.gallery.forEach((img) =>
+          this.fileService.deleteFile(img.url),
+        );
       }
 
       return updated;
     } catch (error) {
       // SI ÉCHEC : On supprime les NOUVEAUX fichiers uploadés
-      if (files?.image?.[0]) this.deleteFile(files.image[0].path);
-      if (files?.gallery) files.gallery.forEach((file) => this.deleteFile(file.path));
+      if (files?.image?.[0]) this.fileService.deleteFile(files.image[0].path);
+      if (files?.gallery)
+        files.gallery.forEach((file) => this.fileService.deleteFile(file.path));
       throw error;
     }
   }
@@ -169,8 +158,8 @@ export class PropertiesService {
     });
 
     // On supprime les fichiers du disque après la suppression en DB
-    this.deleteFile(property.image);
-    property.gallery.forEach((img) => this.deleteFile(img.url));
+    this.fileService.deleteFile(property.image);
+    property.gallery.forEach((img) => this.fileService.deleteFile(img.url));
 
     return result;
   }

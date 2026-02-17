@@ -5,7 +5,8 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
+  moduleFormat  = "cjs"
 }
 
 datasource db {
@@ -18,41 +19,44 @@ model User {
   lastName  String
   avatar    String?
   email     String   @unique
-  tel       String?   @unique
+  tel       String?  @unique
   password  String
   properties    Property[]
   createdAt   DateTime       @default(now())
   updatedAt   DateTime       @updatedAt
+
+  @@index([email])
 }
 
 model Property {
   id          String         @id @default(cuid())
   image       String
   price       String
-  rating      Float?         @default(0)
-  isSelected  Boolean?       @default(false)
   name        String
   location    String
   category    String
-  lat         Float
-  lng         Float
   description String
   bedrooms    Int
   bathrooms   Int
   garage      Boolean
-  parking     Int
   wifi        Boolean
-  kitchen     String
+  kitchen     Boolean
   ownerId     String
-  owner       User           @relation(fields: [ownerId], references: [id])
+  owner       User           @relation(fields: [ownerId], references: [id], onDelete: Cascade)
   gallery     GalleryImage[]
   createdAt   DateTime       @default(now())
   updatedAt   DateTime       @updatedAt
+
+  @@index([ownerId])
+  @@index([category])
+  @@index([location])
 }
 
 model GalleryImage {
   id      String @id @default(cuid())
   url     String
   propertyId String
-  property   Property  @relation(fields: [propertyId], references: [id])
+  property   Property  @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+
+  @@index([propertyId])
 }

@@ -1,20 +1,16 @@
 import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { PrismaService } from 'src/prisma.service';
+import { PrismaService } from 'src/services/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import * as bcrypt from 'bcrypt';
+import { UrlGeneratorService } from 'src/services/url-generator.service';
 
 @Injectable()
 export class UsersService {
-  private readonly baseUrl: string;
-
   constructor(
     private prisma: PrismaService,
-    private configService: ConfigService
-  ) {
-    this.baseUrl = this.configService.get<string>('BACKEND_URL') || 'http://localhost:3000';
-  }
+    private urlGenerator: UrlGeneratorService,
+  ) {}
 
   async create(createUserDto: CreateUserDto) {
     const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
@@ -29,27 +25,16 @@ export class UsersService {
   }
 
   async findAll() {
-    const users = await this.prisma.user.findMany({
-      include: {
-        properties: true,
-      },
-    });
+    const users = await this.prisma.user.findMany();
 
     // Ajouter l'URL complète aux chemins d'avatars et exclure les mots de passe
     return users.map((user) => {
       const { password, ...result } = user;
       return {
         ...result,
-        avatar: this.formatUrl(user.avatar),
+        avatar: user.avatar ? this.urlGenerator.generateUrl(user.avatar) : null,
       };
     });
-  }
-
-  private formatUrl(path: string | null): string | null {
-    if (!path) return null;
-    if (path.startsWith('http')) return path;
-    const cleanPath = path.startsWith('/') ? path.substring(1) : path;
-    return `${this.baseUrl}/${cleanPath}`;
   }
 
   async findOne(id: string) {
@@ -68,7 +53,7 @@ export class UsersService {
     const { password, ...result } = user;
     return {
       ...result,
-      avatar: this.formatUrl(user.avatar),
+      avatar: user.avatar ? this.urlGenerator.generateUrl(user.avatar) : null,
     };
   }
 

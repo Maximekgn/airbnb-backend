@@ -6,8 +6,8 @@ import { PropertiesModule } from './resources/properties/properties.module';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './resources/auth/auth.module';
 import { CategoriesModule } from './resources/categories/categories.module';
-import { PrismaService } from './services/prisma.service';
-import { SeedModule } from './services/seed.module';
+import { PrismaService } from '../prisma/prisma.service';
+import { SeedModule } from './resources/seed/seed.module';
 
 @Module({
   imports: [

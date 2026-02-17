@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { CreatePropertyDto } from './dto/create-property.dto';
 import { UpdatePropertyDto } from './dto/update-property.dto';
-import { PrismaService } from 'src/services/prisma.service';
-import { FileService } from 'src/services/files.service';
-import { UrlGeneratorService } from 'src/services/url-generator.service';
+import { PrismaService } from 'prisma/prisma.service';
+import { FileService } from 'src/common/utils/files.service';
+import { UrlGeneratorService } from 'src/common/utils/url-generator.service';
 
 @Injectable()
 export class PropertiesService {
